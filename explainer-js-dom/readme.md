@@ -6,7 +6,8 @@ Nowadays, with a tad more experience under my belt (though, sadly, never enough)
 
 This article is an attempt at clarifying those distinctions and, hopefully, give you a bit more clarity into some basic concepts in programming which might seem unimportant when you're just starting out.
 
-###Javascript is a programming language
+### Javascript is a programming language
+
 If this subheading might seem borderline offensive in its obviousness --- "I know JS is a programming language" --- it is crucial in understanding what comes later on. First of all, it is good to establish what is a programming language. We don't want nor need to go too deep into this right now, so before anything else let's focus on the "language" bit.
 
 Much in the same way human languages establish a set of rules for the exchange of information between two (usually human) entities, programming languages are sets of rules to establish communication between humans and machines. What should stick out here is that languages are not words or actual information, but a set of instructions on how to organise said words into something that can actually be understood. English, for instance, is not the sum of all words in its dictionary, but the set of rules that establish the usage of these words. If I simply write "dog is cat cute really and", it is unlikely people will understand me even though I used valid and common English words; that is because a language tends to be more about the structure within which we organise information and less about that information itself.
@@ -23,7 +24,7 @@ What this means is that programming languages, in and of themselves, don't actua
 
 Javascript, as a programming language, is no exception. Even though it is most commonly used in a browser, Javascript alone can't do anything to a web page.
 
-###Browsers and APIs
+### Browsers and APIs
 If, you may ask, Javascript is powerless to do anything to a web page, how come it can make pages do all sorts of things? That's where APIs come into play.
 
 Once again, we're not really interested in the deep intricacies of things here, so simple definitions are more than enough. API stands for "Application Public Interface" and is, in a nutshell, a way that certain programs allow other programs to interact with it. You might have heard, for instance, of the Twitter API: it gives you a small window to look into Twitter's data and interact with it, even though you are not part of the organisation.
