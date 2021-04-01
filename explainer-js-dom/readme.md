@@ -16,11 +16,15 @@ English, for instance, is not the sum of all words in its dictionary, but the se
 
 Computer languages do not deviate much from this. As you are probably aware, writing
 
-	```let x = 1;```
+```javascript
+    let x = 1;
+```
 
 Means something completely different than
 
-	```let = 1 x;```
+```javascript
+    let = 1 x;
+```
 
 Or, more precisely, the first would be understood by any modern browser or JS interpreter whilst the second makes very little sense, even if its individual elements are still valid "words" in Javascript.
 
@@ -50,8 +54,10 @@ Of course, these interactions must follow a set of rules. The browser obviously 
 
 It is through the DOM that you can do things like this
 
-    let el = document.querySelector('.aClassName);
-	console.log(el);
+```javascript
+let el = document.querySelector('.aClassName);
+console.log(el);
+```
 
 What happens here is that, using Javascript, you ask `document`, which is the main access point to the page's outline, to search through all of its nodes for the first instance of an element with a class attribute that equals `.aClassName`.
 

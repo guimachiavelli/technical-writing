@@ -44,38 +44,41 @@ For illustration purposes, we will create a very simple application that display
 
 `index.html`
 
-	<body>
-	  <input id="input-1" placeholder="Type a number" name="field-1" />
-	  <input id="input-2" placeholder="Type another number" name="field-2" />
+```html
+<body>
+  <input id="input-1" placeholder="Type a number" name="field-1" />
+  <input id="input-2" placeholder="Type another number" name="field-2" />
 
-	  <div>
-	    Result: <strong id="result"></strong>
-	  </div>
+  <div>
+    Result: <strong id="result"></strong>
+  </div>
 
-	  <script src="main.js"></script>
-	</body>
-
+  <script src="main.js"></script>
+</body>
+```
 
 There is very little of interest in our html file: two input fields, a container for our results and a link to the main logic of our application contained in `main.js`.
 
 `main.js`
 
-	const scriptURL = "worker.js";
-	const myWorker = new Worker(scriptURL);
+```javascript
+const scriptURL = "worker.js";
+const myWorker = new Worker(scriptURL);
 
-	myWorker.addEventListener("message", handleWorkerMessage);
+myWorker.addEventListener("message", handleWorkerMessage);
 
-	inputFirst.addEventListener("input", handleInput);
-	inputSecond.addEventListener("input", handleInput);
+inputFirst.addEventListener("input", handleInput);
+inputSecond.addEventListener("input", handleInput);
 
-	function handleWorkerMessage(event) {
-	  const workerCalculationResult = event.data;
-	  result.textContent = workerCalculationResult;
-	}
+function handleWorkerMessage(event) {
+  const workerCalculationResult = event.data;
+  result.textContent = workerCalculationResult;
+}
 
-	function handleInput() {
-	  myWorker.postMessage([inputFirst.value, inputSecond.value]);
-	}
+function handleInput() {
+  myWorker.postMessage([inputFirst.value, inputSecond.value]);
+}
+```
 
 
 This is our main application logic. First, we create our worker by calling the `Worker` constructor and passing the URL to our worker script --- `worker.js` in our case. After creating our worker, we do two very important things.
@@ -88,16 +91,17 @@ As you might have noticed, looking at this file tells us nothing about what the 
 
 `worker.js`
 
-	self.addEventListener("message", handleMessage);
+```javascript
+self.addEventListener("message", handleMessage);
 
-	function handleMessage(event) {
-	  const termFirst = parseInt(event.data[0]);
-	  const termSecond = parseInt(event.data[1]);
-	  const sum = termFirst + termSecond;
+function handleMessage(event) {
+  const termFirst = parseInt(event.data[0]);
+  const termSecond = parseInt(event.data[1]);
+  const sum = termFirst + termSecond;
 
-	  postMessage(sum);
-	}
-
+  postMessage(sum);
+}
+```
 
 There are two things of note in our worker's logic.
 
@@ -123,48 +127,49 @@ This provides an indication of a Service Worker's most common use case: creating
 In the following example, we will create a small application that requests a three-character string from the server. When a user first visits our application, the Service Worker caches a list of strings so that the site can continue working as before.
 
 `index.html`
+```html
+<body>
+  <button id="button">Load a random string</button>
 
-	<body>
-	  <button id="button">Load a random string</button>
+  <div>Result: <strong id="result"></strong></div>
 
-	  <div>Result: <strong id="result"></strong></div>
-
-	  <script src="main.js"></script>
-	</body>
-
+  <script src="main.js"></script>
+</body>
+```
 
 As before, our html is kept very simple: one button, one container for our results and a reference to our main application logic.
 
 `Main.js`
 
-	const button = document.querySelector("#button");
-	const result = document.querySelector("#result");
+```javascript
+const button = document.querySelector("#button");
+const result = document.querySelector("#result");
 
-	const serviceWorkerURL = "./worker.js";
+const serviceWorkerURL = "./worker.js";
 
-	navigator.serviceWorker.register(serviceWorkerURL);
+navigator.serviceWorker.register(serviceWorkerURL);
 
-	button.addEventListener("click", handleButtonClick);
+button.addEventListener("click", handleButtonClick);
 
-	function handleButtonClick() {
-	  fetch("./strings.txt").then(handleFetchSuccess).then(handleFetchData);
-	}
+function handleButtonClick() {
+  fetch("./strings.txt").then(handleFetchSuccess).then(handleFetchData);
+}
 
-	function handleFetchSuccess(response) {
-	  return response.text();
-	}
+function handleFetchSuccess(response) {
+  return response.text();
+}
 
-	function handleFetchData(data) {
-	  const strings = data.split("\n");
+function handleFetchData(data) {
+  const strings = data.split("\n");
 
-	  result.textContent = randomArrayItem(strings);
-	}
+  result.textContent = randomArrayItem(strings);
+}
 
-	function randomArrayItem(arr) {
-	  const randomInt = Math.floor(Math.random() * arr.length);
-	  return arr[randomInt];
-	}
-
+function randomArrayItem(arr) {
+  const randomInt = Math.floor(Math.random() * arr.length);
+  return arr[randomInt];
+}
+```
 
 Much as Dedicated Workers, Service Workers must be kept in a dedicated javascript file. We create a new Service Worker differently, however: instead of using the `Worker` constructor, we use `navigator.serviceWorker.register`.
 
@@ -172,21 +177,22 @@ The other relevant line in our main application logic is `handleButtonClick`. In
 
 `worker.js`
 
-	self.addEventListener("install", handleInstall);
-	self.addEventListener("fetch", handleFetch);
+```javascript
+self.addEventListener("install", handleInstall);
+self.addEventListener("fetch", handleFetch);
 
-	function handleInstall(event) {
-	  event.waitUntil(
-	    caches.open("v1").then(function (cache) {
-	      return cache.addAll(["./", "./index.html", "./main.js", "./strings.txt"]);
-	    })
-	  );
-	}
+function handleInstall(event) {
+  event.waitUntil(
+    caches.open("v1").then(function (cache) {
+      return cache.addAll(["./", "./index.html", "./main.js", "./strings.txt"]);
+    })
+  );
+}
 
-	function handleFetch(event) {
-	  event.respondWith(caches.match(event.request));
-	}
-
+function handleFetch(event) {
+  event.respondWith(caches.match(event.request));
+}
+```
 
 Our Service Worker is a bit more complex than a regular Web Worker, but still fairly simple. We begin the file by instructing the worker to monitor two events: `install` and `fetch`. These events are specific to Service Workers and are not available to other Web Workers.
 
